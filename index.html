@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prison RP: Staff</title>
+    <style>
+        /* General Body and Main Container Styles */
+        body {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-size: 16px;
+        }
+
+        #main-container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            max-width: 1200px;
+            max-height: 900px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            background-color: #222;
+        }
+
+        /* Left Menu Column */
+        #left-menu-column {
+            width: 280px;
+            background-color: #1a1a1a;
+            flex-shrink: 0;
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.5);
+            border-right: 1px solid #333;
+        }
+        #menu-header {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        #menu-header h1 {
+            color: #28a745;
+            margin: 0;
+            font-size: 2em;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        #user-profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: auto;
+            text-align: center;
+            width: 100%;
+            padding: 15px 0;
+            border-radius: 10px;
+            background-color: #252525;
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
+        }
+        #pfp-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #28a745;
+            margin-bottom: 15px;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+            transition: transform 0.2s ease-in-out;
+        }
+        #pfp-image:hover {
+            transform: scale(1.05);
+        }
+        #user-display-name {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #f0f0f0;
+            margin-bottom: 8px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        #user-status {
+            font-size: 0.9em;
+            color: #a0a0a0;
+            margin-bottom: 10px; /* Adjusted margin */
+            font-style: italic;
+        }
+        #statusSelect { /* Styling for the new status dropdown */
+            width: 80%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: #e0e0e0;
+            font-size: 0.9em;
+            margin-bottom: 20px; /* Space below status dropdown */
+            appearance: none; /* Remove default dropdown arrow */
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23e0e0e0%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13.2-6.2H18.2c-4.1%200-7.9%201.5-10.9%204.5-3%203-4.5%206.8-4.5%2010.9v195.4c0%204.1%201.5%207.9%204.5%2010.9s6.8%204.5%2010.9%204.5h255.6c4.1%200%207.9-1.5%2010.9-4.5s4.5-6.8%204.5-10.9V82.6c0-4.1-1.5-7.9-4.5-10.9z%22%2F%3E%3C%2Fsvg%3E'); /* Custom arrow */
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 12px;
+            cursor: pointer;
+        }
+        #statusSelect:focus {
+            border-color: #28a745;
+            outline: none;
+        }
+
+        /* PFP Selection Styles */
+        #pfp-selection-container {
+            width: 100%;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 10px 0;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+        }
+        #pfp-selection-container p {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #c0c0c0;
+        }
+        .pfp-options {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .pfp-options label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            transition: border-color 0.2s ease, transform 0.1s ease;
+        }
+        .pfp-options label:hover {
+            border-color: #555;
+            transform: translateY(-2px);
+        }
+        .pfp-options input[type="radio"] {
+            display: none; /* Hide default radio button */
+        }
+        .pfp-options input[type="radio"]:checked + img {
+            border: 2px solid #28a745; /* Highlight selected PFP */
+            box-shadow: 0 0 8px rgba(40, 167, 69, 0.7);
+            transform: scale(1.05);
+        }
+        .pfp-options img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            transition: border 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+        }
+
+
+        #menu-buttons {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 12px;
+            margin-top: 30px;
+        }
+        #menu-buttons button {
+            width: 100%;
+            padding: 14px 15px;
+            font-size: 1.05em;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        #menu-buttons button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+        #deleteAllMessagesButton {
+            background-color: #ffc107;
+            color: #333;
+        }
+        #deleteAllMessagesButton:hover {
+            background-color: #e0a800;
+        }
+        #notificationToggle {
+            background-color: #007bff;
+        }
+        #notificationToggle.active {
+            background-color: #28a745;
+        }
+        #notificationToggle:hover {
+            background-color: #0056b3;
+        }
+        #logoutButton {
+            background-color: #dc3545;
+        }
+        #logoutButton:hover {
+            background-color: #c82333;
+        }
+
+
+        /* Right Chat Column */
+        #right-chat-column {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #222;
+            padding: 20px;
+        }
+        #chat {
+            flex-grow: 1;
+            padding-right: 15px;
+            overflow-y: auto;
+            border-bottom: 1px solid #333;
+            margin-bottom: 15px;
+            scroll-behavior: smooth;
+            padding-left: 5px;
+        }
+        /* Custom Scrollbar Styles (Webkit browsers) */
+        #chat::-webkit-scrollbar {
+            width: 8px;
+        }
+        #chat::-webkit-scrollbar-track {
+            background: #333;
+            border-radius: 10px;
+        }
+        #chat::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 10px;
+        }
+        #chat::-webkit-scrollbar-thumb:hover {
+            background: #777;
+        }
+
+        .message {
+            margin-bottom: 12px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            max-width: 85%;
+            word-wrap: break-word;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            position: relative; /* For PFP positioning */
+            padding-left: 60px; /* Space for PFP */
+        }
+        .message-pfp { /* PFP next to message */
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            border: 2px solid #28a745;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        .message-sender {
+            font-weight: bold;
+            flex-grow: 1;
+            color: #f0f0f0;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 5px; /* Space between name and status */
+        }
+        .message-sender .status-indicator { /* Small circle for status */
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 3px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .status-online { background-color: #28a745; }
+        .status-offline { background-color: #dc3545; }
+        .status-inactive { background-color: #ffc107; }
+        .status-dnd { background-color: #007bff; }
+
+
+        .message .timestamp {
+            font-size: 0.75em;
+            color: #b0b0b0;
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+        .message-content-wrapper {
+            width: 100%;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+        .message-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            width: 100%;
+            justify-content: flex-end;
+        }
+        .my-message {
+            background-color: #28a745;
+            align-self: flex-end;
+            margin-left: auto;
+            text-align: right;
+            align-items: flex-end;
+            color: #fff;
+            padding-right: 60px; /* Space for PFP on right */
+            padding-left: 15px; /* Adjust padding */
+        }
+        .my-message .message-pfp {
+            left: auto;
+            right: 10px;
+            border-color: #fff; /* White border for own PFP */
+        }
+        .my-message .message-buttons {
+            justify-content: flex-start;
+        }
+        .my-message .message-sender {
+            color: #fff;
+        }
+        .my-message .timestamp {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .other-message {
+            background-color: #444;
+            align-self: flex-start;
+            text-align: left;
+            color: #e0e0e0;
+        }
+        .system-message {
+            font-style: italic;
+            color: #bbb;
+            text-align: center;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+        .delete-button, .reply-button {
+            border-radius: 5px;
+            padding: 6px 10px;
+            font-size: 0.75em;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            text-transform: capitalize;
+        }
+        .delete-button { background-color: #dc3545; }
+        .reply-button { background-color: #007bff; }
+        .delete-button:hover { background-color: #c82333; transform: translateY(-1px); }
+        .reply-button:hover { background-color: #0056b3; transform: translateY(-1px); }
+
+        /* Reply Preview within a message */
+        .reply-preview {
+            background-color: rgba(0, 0, 0, 0.25);
+            border-left: 3px solid #007bff;
+            padding: 6px 12px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            color: #c0c0c0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            width: fit-content;
+            align-self: flex-start;
+        }
+        .my-message .reply-preview {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-left-color: #0056b3;
+            align-self: flex-end;
+        }
+        .reply-preview strong {
+            color: #f0f0f0;
+            font-weight: 600;
+        }
+
+        /* Typing Indicator Styles */
+        #typing-indicator {
+            width: 100%;
+            color: #a0a0a0;
+            font-style: italic;
+            font-size: 0.9em;
+            margin-bottom: 12px;
+            min-height: 1.2em;
+            text-align: left;
+            padding-left: 5px;
+        }
+
+        /* Controls (Input and Send Button) */
+        #controls {
+            display: flex;
+            flex-direction: column;
+            padding-top: 15px;
+            border-top: 1px solid #333;
+            gap: 10px;
+        }
+        #controls input[type="text"] {
+            flex-grow: 1;
+            padding: 14px;
+            border: 1px solid #555;
+            border-radius: 8px;
+            font-size: 1em;
+            background-color: #333;
+            color: white;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        #controls input[type="text"]:focus {
+            border-color: #28a745;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(40, 167, 69, 0.3);
+        }
+        #controls button { /* Apply button styles to buttons directly inside controls */
+            padding: 12px 25px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            margin-left: 0; /* Reset margin */
+            width: auto;
+            align-self: flex-end; /* Align to the right */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+        #controls button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        #sendButton {
+            background-color: #28a745;
+            color: white;
+        }
+        #sendButton:hover {
+            background-color: #218838;
+        }
+
+        /* Reply Input Area Styles */
+        #reply-input-preview {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-left: 4px solid #007bff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9em;
+            color: #e0e0e0;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+        }
+        #reply-input-preview .reply-text-snippet {
+            flex-grow: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-style: italic;
+        }
+        #reply-input-preview .reply-text-snippet strong {
+            color: #f0f0f0;
+        }
+        #cancelReplyButton {
+            background-color: transparent;
+            color: #ff6666;
+            border: none;
+            font-size: 1.3em;
+            cursor: pointer;
+            margin-left: 15px;
+            padding: 0;
+            line-height: 1;
+            transition: color 0.2s ease;
+        }
+        #cancelReplyButton:hover {
+            color: #ff0000;
+            transform: scale(1.1);
+        }
+
+        /* Removed Image Preview for Chat Message styles as feature is removed */
+
+
+        /* Announcement Input Section (Admin Only) */
+        #announcement-section {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #3a3a3a;
+            border-radius: 10px;
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4);
+            border: 1px solid #555;
+            width: 100%;
+        }
+        #announcement-section h3 {
+            color: #ffc107;
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        #announcementInput {
+            width: calc(100% - 28px);
+            padding: 12px;
+            border: 1px solid #666;
+            border-radius: 5px;
+            background-color: #444;
+            color: white;
+            font-size: 0.95em;
+            outline: none;
+        }
+        #announcementInput:focus {
+            border-color: #ffc107;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(255, 193, 7, 0.3);
+        }
+        #sendAnnouncementButton {
+            background-color: #ffc107;
+            color: #333;
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        #sendAnnouncementButton:hover {
+            background-color: #e0a800;
+        }
+
+        /* Announcement Message Display */
+        .announcement-message {
+            background-color: #5a4a2a;
+            border: 2px solid #ffc107;
+            color: #f0f0f0;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            padding: 15px 20px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 600px;
+            display: block;
+        }
+        .announcement-message .message-header,
+        .announcement-message .message-buttons,
+        .announcement-message .reply-preview {
+            display: none;
+        }
+        .announcement-message .message-content-wrapper {
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Removed Chat Image within a message styles as feature is removed */
+
+
+        /* Login Modal Styles */
+        #login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .login-content {
+            background-color: #222;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+            border: 1px solid #333;
+        }
+        .login-content h2 {
+            color: #28a745;
+            margin-bottom: 25px;
+            font-size: 2em;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        .login-content p {
+            color: #c0c0c0;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .login-content label {
+            display: block;
+            margin-bottom: 10px;
+            text-align: left;
+            color: #e0e0e0;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+        .login-content input {
+            width: calc(100% - 28px);
+            padding: 14px;
+            margin-bottom: 20px;
+            border: 1px solid #555;
+            border-radius: 8px;
+            font-size: 1em;
+            background-color: #333;
+            color: white;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        .login-content input:focus {
+            border-color: #28a745;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 3px rgba(40, 167, 69, 0.4);
+        }
+        .login-content button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            background-color: #28a745;
+            color: white;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .login-content button:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+        }
+        #login-error {
+            color: #ff0000;
+            margin-top: 15px;
+            font-size: 1em;
+            font-weight: bold;
+            display: none;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+            #main-container {
+                flex-direction: column;
+                height: 100%;
+                width: 100%;
+                border-radius: 0;
+                box-shadow: none;
+            }
+            #left-menu-column {
+                width: 100%;
+                height: auto;
+                padding: 15px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+                border-right: none;
+                border-bottom: 1px solid #333;
+            }
+            #menu-header h1 {
+                font-size: 1.8em;
+                margin-bottom: 15px;
+            }
+            #user-profile-section {
+                margin-bottom: 15px;
+                padding: 10px 0;
+            }
+            #pfp-image {
+                width: 80px;
+                height: 80px;
+                margin-bottom: 10px;
+            }
+            #user-display-name {
+                font-size: 1.3em;
+            }
+            #user-status {
+                margin-bottom: 10px;
+            }
+            #statusSelect {
+                width: 90%;
+                margin-bottom: 15px;
+            }
+            #pfp-selection-container {
+                margin-bottom: 10px;
+                padding: 8px 0;
+            }
+            .pfp-options {
+                gap: 8px;
+            }
+            .pfp-options img {
+                width: 30px;
+                height: 30px;
+            }
+            #menu-buttons {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+                margin-top: 15px;
+            }
+            #menu-buttons button {
+                flex-grow: 1;
+                min-width: 120px;
+                padding: 10px 12px;
+                font-size: 0.9em;
+            }
+
+            #right-chat-column {
+                width: 100%;
+                padding: 15px;
+                flex-grow: 1;
+            }
+            #chat {
+                height: 300px;
+                padding-right: 0;
+                margin-bottom: 10px;
+            }
+            #controls {
+                flex-direction: column;
+                padding-top: 10px;
+                gap: 8px;
+            }
+            #controls input[type="text"] {
+                padding: 12px;
+                margin-bottom: 0;
+                width: 100%;
+            }
+            #controls button { /* Apply button styles to buttons directly inside controls on small screens */
+                padding: 10px 20px;
+                font-size: 1em;
+                width: 100%;
+                align-self: stretch;
+            }
+            #reply-input-preview {
+                padding: 8px 10px;
+                margin-bottom: 8px;
+            }
+            #cancelReplyButton {
+                font-size: 1.1em;
+                margin-left: 10px;
+            }
+            .message {
+                padding: 8px 12px;
+                margin-bottom: 8px;
+                padding-left: 50px; /* Adjust for smaller PFP */
+            }
+            .message-pfp {
+                width: 30px;
+                height: 30px;
+                left: 8px;
+                top: 8px;
+            }
+            .my-message {
+                padding-right: 50px;
+                padding-left: 12px;
+            }
+            .my-message .message-pfp {
+                right: 8px;
+                left: auto;
+            }
+            .message-buttons {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            .my-message .message-buttons {
+                align-items: flex-end;
+            }
+            .delete-button, .reply-button {
+                padding: 5px 8px;
+                font-size: 0.7em;
+            }
+            .login-content {
+                padding: 30px;
+                border-radius: 10px;
+                max-width: 350px;
+            }
+            .login-content h2 {
+                font-size: 1.8em;
+            }
+            .login-content input {
+                padding: 12px;
+            }
+            .login-content button {
+                padding: 12px;
+                font-size: 1em;
+            }
+            #announcement-section {
+                padding: 10px;
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
+            #announcement-section h3 {
+                font-size: 1em;
+            }
+            #announcementInput {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+            #sendAnnouncementButton {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+            .announcement-message {
+                padding: 10px 15px;
+                margin: 15px auto;
+                font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Main application container -->
+<div id="main-container">
+
+    <!-- Left Menu Column -->
+    <div id="left-menu-column">
+        <div id="menu-header">
+            <h1>Prison RP: Chat</h1>
+        </div>
+        <div id="user-profile-section">
+            <img id="pfp-image" src="https://placehold.co/100x100/333/fff?text=PFP" alt="Profile Picture">
+            <div id="user-display-name"></div>
+            <div id="user-status">Status: <span id="current-status-display">Online</span></div>
+            <select id="statusSelect">
+                <option value="Online">Online</option>
+                <option value="Offline">Offline</option>
+                <option value="Inactive">Inactive</option>
+                <option value="Do Not Disturb">Do Not Disturb</option>
+            </select>
+            <div id="pfp-selection-container">
+                <p>Choose your PFP:</p>
+                <div class="pfp-options">
+                    <label>
+                        <input type="radio" name="pfpOption" value="https://media.tenor.com/as07r2uaDngAAAAM/who-at-the-door.gif" checked>
+                        <img src="https://media.tenor.com/as07r2uaDngAAAAM/who-at-the-door.gif" alt="PFP 1">
+                    </label>
+                    <label>
+                        <input type="radio" name="pfpOption" value="https://cdn.prod.website-files.com/62bdc93e9cccfb43e155104c/654e8c59670ef4e1734cb62e_63c3c41074f93499edb73ffa_Funny%2520Dog%2520Pfp%2520for%2520Tiktok%25201.jpeg">
+                        <img src="https://cdn.prod.website-files.com/62bdc93e9cccfb43e155104c/654e8c59670ef4e1734cb62e_63c3c41074f93499edb73ffa_Funny%2520Dog%2520Pfp%2520for%2520Tiktok%25201.jpeg" alt="PFP 2">
+                    </label>
+                    <label>
+                        <input type="radio" name="pfpOption" value="https://i1.sndcdn.com/artworks-kw01DiEs6AWoIMrA-7Cssyg-t500x500.jpg">
+                        <img src="https://i1.sndcdn.com/artworks-kw01DiEs6AWoIMrA-7Cssyg-t500x500.jpg" alt="PFP 3">
+                    </label>
+                    <label>
+                        <input type="radio" name="pfpOption" value="https://media.tenor.com/VjST3t1_kv4AAAAM/black-gru-gru.gif">
+                        <img src="https://media.tenor.com/VjST3t1_kv4AAAAM/black-gru-gru.gif" alt="PFP 4">
+                    </label>
+                </div>
+            </div>
+            <button id="notificationToggle">Enable Notifications</button>
+        </div>
+        <div id="menu-buttons">
+            <button id="deleteAllMessagesButton">Delete All Messages</button>
+            <button id="logoutButton">Logout</button>
+        </div>
+    </div>
+
+    <!-- Right Chat Column -->
+    <div id="right-chat-column">
+        <div id="chat"></div>
+        <div id="typing-indicator"></div>
+        <div id="controls">
+            <!-- Announcement Section (Admin Only) -->
+            <div id="announcement-section">
+                <h3>Send Announcement</h3>
+                <input type="text" id="announcementInput" placeholder="Type your announcement...">
+                <button id="sendAnnouncementButton">Send Announcement</button>
+            </div>
+
+            <div id="reply-input-preview" style="display: none;">
+                <span class="reply-text-snippet"></span>
+                <button id="cancelReplyButton">x</button>
+            </div>
+            <input type="text" id="messageInput" placeholder="Type your message..." autocomplete="off">
+            <button id="sendButton">Send</button>
+        </div>
+    </div>
+</div>
+
+<!-- Login Modal (remains outside main container) -->
+<div id="login-modal">
+    <div class="login-content">
+        <h2>Enter Chatroom</h2>
+        <p>Please choose your display name.</p>
+        <label for="loginDisplayName">Your Display Name:</label>
+        <input type="text" id="loginDisplayName" placeholder="e.g., ChatMaster2000" autocomplete="nickname">
+        <p id="login-error">Display Name is required or already taken.</p>
+        <button id="enterChatButton">Enter Chat</button>
+    </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script> <!-- Storage SDK is no longer strictly needed for this version, but kept for compatibility if you re-add features later -->
+
+<script>
+    // --- CONFIGURATION ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyAUUZP0SViPN5BkX9Iz7l5rf1m9NYounlk",
+        authDomain: "prison-rp-chat.firebaseapp.com",
+        projectId: "prison-rp-chat",
+        storageBucket: "prison-rp-chat.appspot.com",
+        messagingSenderId: "381161714529",
+        appId: "1:381161714529:web:690839ae944111483f0b20",
+        measurementId: "G-XWDJ4MYD6R",
+        databaseURL: "https://prison-rp-chat-default-rtdb.firebaseio.com/"
+    };
+    // -------------------
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth(app);
+    const db = firebase.database(app);
+    // const storage = firebase.storage(app); // Storage is no longer used for this version
+    const chatRef = db.ref("messages");
+    const usersRef = db.ref("users");
+    const displayNamesLookupRef = db.ref("displayNamesLookup");
+    const typingStatusRef = db.ref("typingStatus");
+
+    // DOM Elements
+    const mainContainer = document.getElementById("main-container");
+    const chat = document.getElementById("chat");
+    const messageInput = document.getElementById("messageInput");
+    const sendButton = document.getElementById("sendButton");
+    // Removed: const addLineButton = document.getElementById("addLineButton");
+    const logoutButton = document.getElementById("logoutButton");
+    const deleteAllMessagesButton = document.getElementById("deleteAllMessagesButton");
+    const typingIndicator = document.getElementById("typing-indicator");
+
+    // UI Elements
+    const pfpImage = document.getElementById("pfp-image");
+    const userDisplayNameDiv = document.getElementById("user-display-name");
+    const userStatusDiv = document.getElementById("user-status");
+    const currentStatusDisplay = document.getElementById("current-status-display");
+    const notificationToggle = document.getElementById("notificationToggle");
+
+    // Reply UI Elements
+    const replyInputPreview = document.getElementById("reply-input-preview");
+    const replyTextSnippet = replyInputPreview.querySelector(".reply-text-snippet");
+    const cancelReplyButton = document.getElementById("cancelReplyButton");
+
+    // Announcement UI Elements
+    const announcementSection = document.getElementById("announcement-section");
+    const announcementInput = document.getElementById("announcementInput");
+    const sendAnnouncementButton = document.getElementById("sendAnnouncementButton");
+
+    // PFP & Status UI Elements
+    const statusSelect = document.getElementById("statusSelect");
+    const pfpSelectionContainer = document.getElementById("pfp-selection-container");
+    const pfpOptions = pfpSelectionContainer.querySelectorAll('input[name="pfpOption"]');
+
+    const loginModal = document.getElementById("login-modal");
+    const loginDisplayNameInput = document.getElementById("loginDisplayName");
+    const enterChatButton = document.getElementById("enterChatButton");
+    const loginError = document.getElementById("login-error");
+
+    let currentUserId = '';
+    let currentDisplayName = '';
+    let currentUserIsAdmin = false;
+    let isTyping = false;
+    let typingTimeout = null;
+    const TYPING_TIMEOUT_DURATION = 3000; // 3 seconds
+
+    let notificationsEnabled = localStorage.getItem('notificationsEnabled') === 'true';
+
+    // Reply state variables
+    let replyingToMessageId = null;
+    let replyingToMessageText = null;
+    let replyingToDisplayName = null;
+
+    // Status tracking
+    let userActivityTimeout = null;
+    const INACTIVE_TIMEOUT_DURATION = 3 * 60 * 1000; // 3 minutes in milliseconds
+
+    // Pre-defined PFP URLs
+    const PREDEFINED_PFPS = [
+        "https://placehold.co/100x100/FF5733/FFFFFF?text=PFP1", // Red
+        "https://placehold.co/100x100/33FF57/FFFFFF?text=PFP2", // Green
+        "https://placehold.co/100x100/3357FF/FFFFFF?text=PFP3", // Blue
+        "https://placehold.co/100x100/FF33FF/FFFFFF?text=PFP4"  // Magenta
+    ];
+
+    // Notification sound
+    const notificationSound = new Audio('https://www.soundjay.com/buttons/beep-07a.mp3'); // A simple beep sound
+
+    // Original document title
+    const originalDocumentTitle = document.title;
+    let unreadMessageCount = 0;
+
+    // --- Helper Functions ---
+
+    function displaySystemMessage(message) {
+        const msgElem = document.createElement("div");
+        msgElem.className = "system-message";
+        msgElem.textContent = message;
+        chat.appendChild(msgElem);
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+    function formatTimestamp(timestamp) {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    async function sendMessage() {
+        const text = messageInput.value.trim();
+
+        if (text === "") {
+            return;
+        }
+
+        if (!currentUserId) {
+            displaySystemMessage("You must be logged in to send messages.");
+            return;
+        }
+
+        const messageData = {
+            userId: currentUserId,
+            displayName: currentDisplayName,
+            text: text,
+            timestamp: firebase.database.ServerValue.TIMESTAMP,
+            type: 'chat'
+        };
+
+        if (replyingToMessageId && replyingToMessageText && replyingToDisplayName) {
+            messageData.replyToId = replyingToMessageId;
+            messageData.replyToText = replyingToMessageText;
+            messageData.replyToDisplayName = replyingToDisplayName;
+        }
+
+        chatRef.push(messageData);
+
+        messageInput.value = "";
+        messageInput.focus();
+        setUserTypingStatus(false);
+        cancelReply();
+        resetUnreadMessages(); // Reset unread count when sending a message
+    }
+
+    function sendAnnouncement() {
+        const announcementText = announcementInput.value.trim();
+
+        if (announcementText === "") {
+            displaySystemMessage("Announcement text cannot be empty.");
+            return;
+        }
+
+        if (!currentUserIsAdmin) {
+            displaySystemMessage("You do not have permission to send announcements.");
+            return;
+        }
+
+        chatRef.push({
+            userId: currentUserId,
+            displayName: "SYSTEM ANNOUNCEMENT",
+            text: announcementText,
+            timestamp: firebase.database.ServerValue.TIMESTAMP,
+            type: 'announcement'
+        }).then(() => {
+            displaySystemMessage("Announcement sent!");
+            announcementInput.value = "";
+        }).catch((error) => {
+            console.error("Error sending announcement:", error);
+            displaySystemMessage("Failed to send announcement.");
+        });
+    }
+
+
+    function deleteMessage(messageId, messageUserId) {
+        if (confirm("Are you sure you want to delete this message?")) {
+            if (currentUserIsAdmin || messageUserId === currentUserId) {
+                chatRef.child(messageId).remove()
+                    .then(() => {
+                        console.log("Message deleted successfully:", messageId);
+                        displaySystemMessage("A message was deleted.");
+                    })
+                    .catch((error) => {
+                        console.error("Error deleting message:", error);
+                        displaySystemMessage("Error: Could not delete message. Check permissions.");
+                    });
+            } else {
+                displaySystemMessage("You do not have permission to delete this message.");
+            }
+        }
+    }
+
+    function deleteAllMessages() {
+        if (currentUserIsAdmin && confirm("ARE YOU ABSOLUTELY SURE you want to delete ALL messages? This action cannot be undone!")) {
+            chatRef.remove()
+                .then(() => {
+                    console.log("All messages deleted successfully.");
+                    displaySystemMessage("All messages have been cleared by an admin.");
+                })
+                .catch((error) => {
+                    console.error("Error deleting all messages:", error);
+                    displaySystemMessage("Error: Could not delete all messages. Check admin permissions.");
+                });
+        } else if (!currentUserIsAdmin) {
+            displaySystemMessage("You do not have permission to delete all messages.");
+        }
+    }
+
+    // Function to update user's PFP based on selection
+    async function updatePfpSelection(pfpUrl) {
+        if (!currentUserId) {
+            displaySystemMessage("You must be logged in to change your PFP.");
+            return;
+        }
+        try {
+            await usersRef.child(currentUserId).update({ pfpUrl: pfpUrl });
+            pfpImage.src = pfpUrl; // Update local PFP
+            displaySystemMessage("Profile picture updated successfully!");
+        } catch (error) {
+            console.error("Error updating PFP:", error);
+            displaySystemMessage("Failed to update profile picture.");
+        }
+    }
+
+    // Function to update user status
+    function updateStatus(newStatus) {
+        if (!currentUserId) return;
+        usersRef.child(currentUserId).update({ status: newStatus, lastActive: firebase.database.ServerValue.TIMESTAMP })
+            .then(() => {
+                currentStatusDisplay.textContent = newStatus;
+                localStorage.setItem('lastStatus', newStatus); // Save status to local storage
+                console.log("Status updated to:", newStatus);
+            })
+            .catch(error => {
+                console.error("Error updating status:", error);
+            });
+    }
+
+    // Reset activity timeout
+    function resetActivityTimeout() {
+        if (userActivityTimeout) {
+            clearTimeout(userActivityTimeout);
+        }
+        if (statusSelect.value === 'Online') {
+            userActivityTimeout = setTimeout(() => {
+                updateStatus('Inactive');
+                statusSelect.value = 'Inactive';
+            }, INACTIVE_TIMEOUT_DURATION);
+        }
+        if (currentUserId) {
+            usersRef.child(currentUserId).update({ lastActive: firebase.database.ServerValue.TIMESTAMP });
+        }
+    }
+
+    // Handlers for user activity
+    function handleUserActivity() {
+        if (statusSelect.value === 'Inactive') {
+            updateStatus('Online');
+            statusSelect.value = 'Online';
+        }
+        resetActivityTimeout();
+    }
+
+    // Function to update document title with unread count
+    function updateDocumentTitle() {
+        if (unreadMessageCount > 0) {
+            document.title = `(${unreadMessageCount}) ${originalDocumentTitle}`;
+        } else {
+            document.title = originalDocumentTitle;
+        }
+    }
+
+    // Function to reset unread messages and title
+    function resetUnreadMessages() {
+        unreadMessageCount = 0;
+        updateDocumentTitle();
+    }
+
+    function initializeChat() {
+        try {
+            loginModal.style.display = 'none';
+            mainContainer.style.display = 'flex';
+
+            userDisplayNameDiv.textContent = currentDisplayName;
+            currentStatusDisplay.textContent = statusSelect.value;
+
+            // Load user's PFP if available, otherwise set default
+            usersRef.child(currentUserId).once('value').then(snapshot => {
+                const userProfile = snapshot.val();
+                if (userProfile && userProfile.pfpUrl) {
+                    pfpImage.src = userProfile.pfpUrl;
+                    // Select the corresponding radio button if it matches a predefined PFP
+                    pfpOptions.forEach(radio => {
+                        if (radio.value === userProfile.pfpUrl) {
+                            radio.checked = true;
+                        }
+                    });
+                } else {
+                    pfpImage.src = PREDEFINED_PFPS[0]; // Default to first PFP
+                    pfpOptions[0].checked = true; // Select the first radio button
+                }
+                // Set initial status from DB or last saved status
+                const lastSavedStatus = localStorage.getItem('lastStatus');
+                if (lastSavedStatus) {
+                    statusSelect.value = lastSavedStatus;
+                    currentStatusDisplay.textContent = lastSavedStatus;
+                    updateStatus(lastSavedStatus); // Update DB with last saved status
+                } else if (userProfile && userProfile.status) {
+                    statusSelect.value = userProfile.status;
+                    currentStatusDisplay.textContent = userProfile.status;
+                } else {
+                    updateStatus('Online');
+                }
+                resetActivityTimeout();
+            }).catch(error => console.error("Error loading user profile:", error));
+
+
+            // Show/hide admin buttons and announcement section
+            if (currentUserIsAdmin) {
+                deleteAllMessagesButton.style.display = 'block';
+                announcementSection.style.display = 'flex';
+            } else {
+                deleteAllMessagesButton.style.display = 'none';
+                announcementSection.style.display = 'none';
+            }
+
+            updateNotificationButtonState();
+
+            messageInput.focus();
+            displaySystemMessage(`You are logged in as "${currentDisplayName}"${currentUserIsAdmin ? " (Admin)" : ""}.`);
+
+            chat.innerHTML = '';
+            chatRef.off();
+            typingStatusRef.off();
+
+            // Listen for new messages
+            chatRef.on("child_added", function (snapshot) {
+                const msg = snapshot.val();
+                const messageId = snapshot.key;
+                const msgElem = document.createElement("div");
+
+                if (msg.type === 'announcement') {
+                    msgElem.className = "announcement-message";
+                    msgElem.textContent = msg.text;
+                } else { // Regular chat message or system message
+                    msgElem.className = "message";
+                    if (msg.userId === currentUserId) {
+                        msgElem.classList.add("my-message");
+                    } else if (msg.type === 'system') {
+                        msgElem.classList.add("system-message");
+                        msgElem.textContent = msg.text;
+                        chat.appendChild(msgElem);
+                        chat.scrollTop = chat.scrollHeight;
+                        return;
+                    } else {
+                        msgElem.classList.add("other-message");
+                        // Check if notifications are enabled AND user is NOT in "Do Not Disturb" mode
+                        if (notificationsEnabled && Notification.permission === 'granted' && statusSelect.value !== 'Do Not Disturb') {
+                            new Notification(`New message from ${msg.displayName || 'Anonymous'}`, {
+                                body: msg.text || 'New message',
+                                icon: pfpImage.src
+                            });
+                            notificationSound.play().catch(e => console.error("Error playing sound:", e)); // Play sound
+                            unreadMessageCount++; // Increment unread count
+                            updateDocumentTitle(); // Update title
+                        }
+                    }
+
+                    // PFP for chat messages
+                    const messagePfp = document.createElement("img");
+                    messagePfp.className = "message-pfp";
+                    messagePfp.src = "https://placehold.co/40x40/333/fff?text=PFP"; // Default PFP for messages
+                    messagePfp.alt = "PFP";
+                    usersRef.child(msg.userId).once('value').then(userSnapshot => {
+                        if (userSnapshot.exists() && userSnapshot.val().pfpUrl) {
+                            messagePfp.src = userSnapshot.val().pfpUrl;
+                        } else {
+                            // If sender has no PFP, assign a default from the predefined list
+                            messagePfp.src = PREDEFINED_PFPS[0];
+                        }
+                    }).catch(error => console.error("Error fetching sender PFP:", error));
+                    msgElem.appendChild(messagePfp);
+
+
+                    const formattedTime = msg.timestamp ? formatTimestamp(msg.timestamp) : '';
+
+                    const messageHeaderDiv = document.createElement("div");
+                    messageHeaderDiv.className = "message-header";
+                    const senderNameSpan = document.createElement("span");
+                    senderNameSpan.className = "message-sender";
+                    senderNameSpan.textContent = `${msg.displayName || 'Anonymous'}`;
+
+                    // Add status indicator to sender name
+                    const statusIndicator = document.createElement("span");
+                    statusIndicator.className = "status-indicator";
+                    usersRef.child(msg.userId).once('value').then(userSnapshot => {
+                        if (userSnapshot.exists() && userSnapshot.val().status) {
+                            const status = userSnapshot.val().status;
+                            statusIndicator.classList.add(`status-${status.toLowerCase().replace(/\s/g, '-')}`);
+                            statusIndicator.title = status;
+                        } else {
+                            statusIndicator.classList.add('status-offline');
+                            statusIndicator.title = 'Offline';
+                        }
+                    }).catch(error => console.error("Error fetching sender status:", error));
+                    senderNameSpan.prepend(statusIndicator);
+
+                    const timestampSpan = document.createElement("span");
+                    timestampSpan.className = "timestamp";
+                    timestampSpan.textContent = formattedTime;
+                    messageHeaderDiv.appendChild(senderNameSpan);
+                    messageHeaderDiv.appendChild(timestampSpan);
+                    msgElem.appendChild(messageHeaderDiv);
+
+                    const messageContentWrapper = document.createElement("div");
+                    messageContentWrapper.className = "message-content-wrapper";
+
+                    if (msg.replyToId && msg.replyToText && msg.replyToDisplayName) {
+                        const replyPreviewDiv = document.createElement("div");
+                        replyPreviewDiv.className = "reply-preview";
+                        const truncatedReplyText = msg.replyToText.length > 50 ? msg.replyToText.substring(0, 50) + '...' : msg.replyToText;
+                        replyPreviewDiv.innerHTML = `<strong>${msg.replyToDisplayName}:</strong> "${truncatedReplyText}"`;
+                        messageContentWrapper.appendChild(replyPreviewDiv);
+                    }
+
+                    const textNode = document.createElement("span");
+                    textNode.innerHTML = msg.text.replace(/\n/g, '<br>');
+                    messageContentWrapper.appendChild(textNode);
+
+                    msgElem.appendChild(messageContentWrapper);
+
+                    const messageButtonsDiv = document.createElement("div");
+                    messageButtonsDiv.className = "message-buttons";
+
+                    const replyBtn = document.createElement("button");
+                    replyBtn.textContent = "Reply";
+                    replyBtn.className = "reply-button";
+                    replyBtn.onclick = () => startReply(messageId, msg.text, msg.displayName);
+                    messageButtonsDiv.appendChild(replyBtn);
+
+                    if (currentUserIsAdmin || msg.userId === currentUserId) {
+                        const deleteBtn = document.createElement("button");
+                        deleteBtn.textContent = "Delete";
+                        deleteBtn.className = "delete-button";
+                        deleteBtn.onclick = () => deleteMessage(messageId, msg.userId);
+                        messageButtonsDiv.appendChild(deleteBtn);
+                    }
+                    msgElem.appendChild(messageButtonsDiv);
+                }
+
+                chat.appendChild(msgElem);
+                chat.scrollTop = chat.scrollHeight;
+            });
+
+            // Listen for typing status changes
+            typingStatusRef.on('value', (snapshot) => {
+                const typingUsersData = snapshot.val();
+                const typingDisplayNames = [];
+
+                if (typingUsersData) {
+                    for (const uid in typingUsersData) {
+                        if (uid !== currentUserId) {
+                            typingDisplayNames.push(typingUsersData[uid]);
+                        }
+                    }
+                }
+                updateTypingIndicatorDisplay(typingDisplayNames);
+            });
+
+        } catch (e) {
+            console.error("Error initializing chat:", e);
+            displaySystemMessage("An error occurred while loading chat. Please refresh.");
+        }
+    }
+
+    function showLoginModal(errorMessage = '') {
+        mainContainer.style.display = 'none';
+        loginModal.style.display = 'flex';
+        if (errorMessage) {
+            loginError.textContent = errorMessage;
+            loginError.style.display = 'block';
+        } else {
+            loginError.style.display = 'none';
+        }
+        loginDisplayNameInput.focus();
+    }
+
+    function updateTypingIndicatorDisplay(displayNames) {
+        if (displayNames.length > 0) {
+            let text = '';
+            if (displayNames.length === 1) {
+                text = `<i>${displayNames[0]} is typing...</i>`;
+            } else if (displayNames.length === 2) {
+                text = `<i>${displayNames[0]} and ${displayNames[1]} are typing...</i>`;
+            } else {
+                const last = displayNames.pop();
+                text = `<i>${displayNames.join(', ')}, and ${last} are typing...</i>`;
+            }
+            typingIndicator.innerHTML = text;
+            typingIndicator.style.display = 'block';
+        } else {
+            typingIndicator.innerHTML = '';
+            typingIndicator.style.display = 'none';
+        }
+    }
+
+    function setUserTypingStatus(status) {
+        if (!currentUserId) return;
+
+        if (status) {
+            if (!isTyping) {
+                typingStatusRef.child(currentUserId).set(currentDisplayName);
+                isTyping = true;
+            }
+            if (typingTimeout) {
+                clearTimeout(typingTimeout);
+            }
+            typingTimeout = setTimeout(() => {
+                setUserTypingStatus(false);
+            }, TYPING_TIMEOUT_DURATION);
+        } else {
+            if (isTyping) {
+                typingStatusRef.child(currentUserId).remove();
+                isTyping = false;
+            }
+            if (typingTimeout) {
+                clearTimeout(typingTimeout);
+                typingTimeout = null;
+            }
+        }
+    }
+
+    function updateNotificationButtonState() {
+        if (notificationsEnabled) {
+            notificationToggle.textContent = "Disable Notifications";
+            notificationToggle.classList.add('active');
+        } else {
+            notificationToggle.textContent = "Enable Notifications";
+            notificationToggle.classList.remove('active');
+        }
+    }
+
+    async function toggleNotifications() {
+        if (notificationsEnabled) {
+            notificationsEnabled = false;
+            localStorage.setItem('notificationsEnabled', 'false');
+            updateNotificationButtonState();
+            displaySystemMessage("Notifications disabled.");
+        } else {
+            if (!("Notification" in window)) {
+                displaySystemMessage("This browser does not support desktop notifications.");
+                return;
+            }
+
+            if (Notification.permission === 'granted') {
+                notificationsEnabled = true;
+                localStorage.setItem('notificationsEnabled', 'true');
+                new Notification("Notifications Enabled!", {
+                    body: "You will now receive chat notifications.",
+                    icon: pfpImage.src
+                });
+                updateNotificationButtonState();
+                displaySystemMessage("Notifications enabled.");
+            } else if (Notification.permission === 'denied') {
+                displaySystemMessage("Notification permission denied. Please enable it in your browser settings.");
+            } else { // 'default' or 'prompt'
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    notificationsEnabled = true;
+                    localStorage.setItem('notificationsEnabled', 'true');
+                    new Notification("Notifications Enabled!", {
+                        body: "You will now receive chat notifications.",
+                        icon: pfpImage.src
+                    });
+                    updateNotificationButtonState();
+                    displaySystemMessage("Notifications enabled.");
+                } else {
+                    displaySystemMessage("Notification permission denied.");
+                }
+            }
+        }
+    }
+
+    function startReply(messageId, messageText, senderDisplayName) {
+        replyingToMessageId = messageId;
+        replyingToMessageText = messageText;
+        replyingToDisplayName = senderDisplayName;
+
+        const snippet = messageText.length > 50 ? messageText.substring(0, 50) + '...' : messageText;
+        replyTextSnippet.innerHTML = `Replying to <strong>${senderDisplayName}</strong>: "${snippet}"`;
+        replyInputPreview.style.display = 'flex';
+        messageInput.placeholder = "Type your reply...";
+        messageInput.focus();
+    }
+
+    function cancelReply() {
+        replyingToMessageId = null;
+        replyingToMessageText = null;
+        replyingToDisplayName = null;
+
+        replyInputPreview.style.display = 'none';
+        replyTextSnippet.textContent = '';
+        messageInput.placeholder = "Type your message...";
+    }
+
+
+    // --- Event Listeners ---
+
+    sendButton.addEventListener("click", sendMessage);
+
+    messageInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && !e.shiftKey) { // Send on Enter, unless Shift is held
+            e.preventDefault();
+            sendMessage();
+        } else if (e.key === "Enter" && e.shiftKey) { // Add newline on Shift+Enter
+            e.preventDefault();
+            const start = this.selectionStart;
+            const end = this.selectionEnd;
+            this.value = this.value.substring(0, start) + "\n" + this.value.substring(end);
+            this.selectionStart = this.selectionEnd = start + 1;
+            this.focus();
+            setUserTypingStatus(true);
+        }
+    });
+
+    messageInput.addEventListener("input", () => {
+        setUserTypingStatus(true);
+        handleUserActivity(); // Reset activity on input
+    });
+    messageInput.addEventListener("blur", () => {
+        setUserTypingStatus(false);
+    });
+
+    // PFP selection logic
+    pfpOptions.forEach(radio => {
+        radio.addEventListener('change', (event) => {
+            updatePfpSelection(event.target.value);
+        });
+    });
+
+
+    logoutButton.addEventListener("click", () => {
+        setUserTypingStatus(false);
+        updateStatus('Offline'); // Set status to offline on logout
+        auth.signOut().then(() => {
+            console.log("User signed out.");
+            currentUserId = '';
+            currentDisplayName = '';
+            currentUserIsAdmin = false;
+            localStorage.removeItem('chatDisplayName');
+            showLoginModal("You have been logged out.");
+        }).catch((error) => {
+            console.error("Logout error:", error);
+            displaySystemMessage("Error logging out.");
+        });
+    });
+
+    deleteAllMessagesButton.addEventListener("click", deleteAllMessages);
+    notificationToggle.addEventListener("click", toggleNotifications);
+    cancelReplyButton.addEventListener("click", cancelReply);
+    sendAnnouncementButton.addEventListener("click", sendAnnouncement);
+
+    // Status dropdown change listener
+    statusSelect.addEventListener("change", (event) => {
+        updateStatus(event.target.value);
+        handleUserActivity(); // Reset activity timeout when status is manually changed
+    });
+
+    // Activity listeners for 'Inactive' status
+    document.addEventListener('mousemove', handleUserActivity);
+    document.addEventListener('keydown', handleUserActivity);
+    document.addEventListener('click', handleUserActivity);
+
+    // Reset unread messages when the window gains focus
+    window.addEventListener('focus', resetUnreadMessages);
+
+    // Set status to offline when user closes or navigates away from the page
+    window.addEventListener('beforeunload', () => {
+        if (currentUserId) {
+            usersRef.child(currentUserId).update({ status: 'Offline', lastActive: firebase.database.ServerValue.TIMESTAMP });
+        }
+    });
+
+
+    // Enter Chat button handler
+    enterChatButton.addEventListener("click", async function() {
+        const displayName = loginDisplayNameInput.value.trim();
+
+        if (displayName === '') {
+            showLoginModal("Display Name is required.");
+            return;
+        }
+        if (!/^[a-zA-Z0-9\s_.-]+$/.test(displayName)) {
+            showLoginModal("Display Name can only contain letters, numbers, spaces, underscores, dashes, or periods.");
+            return;
+        }
+
+        try {
+            const userCredential = await auth.signInAnonymously();
+            const user = userCredential.user;
+            currentUserId = user.uid;
+
+            const displayNameExistsSnapshot = await displayNamesLookupRef.child(displayName).once('value');
+            if (displayNameExistsSnapshot.exists() && displayNameExistsSnapshot.val() !== currentUserId) {
+                showLoginModal(`The display name "${displayName}" is already in use by another person. Please choose another.`);
+                await auth.signOut();
+                return;
+            }
+
+            // Get selected PFP or default
+            let selectedPfpUrl = PREDEFINED_PFPS[0]; // Default PFP
+            const checkedPfpOption = document.querySelector('input[name="pfpOption"]:checked');
+            if (checkedPfpOption) {
+                selectedPfpUrl = checkedPfpOption.value;
+            }
+
+            // Retrieve last saved status from localStorage
+            const lastSavedStatus = localStorage.getItem('lastStatus') || 'Online';
+
+            await usersRef.child(currentUserId).update({
+                displayName: displayName,
+                status: lastSavedStatus, // Set status to last saved or Online
+                lastActive: firebase.database.ServerValue.TIMESTAMP,
+                pfpUrl: selectedPfpUrl // Set PFP on login
+            });
+            await displayNamesLookupRef.child(displayName).set(currentUserId);
+
+            currentDisplayName = displayName;
+
+            const userProfileSnapshot = await usersRef.child(currentUserId).once('value');
+            if (userProfileSnapshot.exists()) {
+                const profile = userProfileSnapshot.val();
+                currentUserIsAdmin = profile.isAdmin === true;
+                if (profile.pfpUrl) {
+                    pfpImage.src = profile.pfpUrl;
+                    // Ensure the correct radio button is selected on re-login
+                    pfpOptions.forEach(radio => {
+                        if (radio.value === profile.pfpUrl) {
+                            radio.checked = true;
+                        }
+                    });
+                } else {
+                    pfpImage.src = PREDEFINED_PFPS[0]; // Fallback to default if somehow missing
+                    pfpOptions[0].checked = true;
+                }
+                if (profile.status) {
+                    statusSelect.value = profile.status;
+                    currentStatusDisplay.textContent = profile.status;
+                }
+            } else {
+                currentUserIsAdmin = false;
+                await usersRef.child(currentUserId).set({
+                    displayName: currentDisplayName,
+                    isAdmin: false,
+                    pfpUrl: selectedPfpUrl, // Set PFP for new user
+                    status: lastSavedStatus, // Set default status for new user
+                    lastActive: firebase.database.ServerValue.TIMESTAMP
+                });
+                await displayNamesLookupRef.child(currentDisplayName).set(currentUserId);
+            }
+
+            localStorage.setItem('chatDisplayName', currentDisplayName);
+
+            initializeChat();
+        } catch (error) {
+            console.error("Login error during async operation:", error);
+            showLoginModal(`Failed to enter chat: ${error.message}`);
+        }
+    });
+
+    loginDisplayNameInput.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            enterChatButton.click();
+        }
+    });
+
+    // --- Initial Load Logic and Authentication State ---
+    window.onload = () => {
+        const savedDisplayName = localStorage.getItem('chatDisplayName');
+
+        if (savedDisplayName) {
+            loginDisplayNameInput.value = savedDisplayName;
+        }
+
+        loginDisplayNameInput.focus();
+
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUserId = user.uid;
+                const userProfileSnapshot = await usersRef.child(currentUserId).once('value');
+                if (userProfileSnapshot.exists()) {
+                    const profile = userProfileSnapshot.val();
+
+                    currentDisplayName = profile.displayName;
+                    currentUserIsAdmin = profile.isAdmin === true;
+                    if (profile.pfpUrl) {
+                        pfpImage.src = profile.pfpUrl;
+                        // Select the correct radio button on load
+                        pfpOptions.forEach(radio => {
+                            if (radio.value === profile.pfpUrl) {
+                                radio.checked = true;
+                            }
+                        });
+                    } else {
+                        pfpImage.src = PREDEFINED_PFPS[0]; // Fallback to default if PFP is missing
+                        pfpOptions[0].checked = true;
+                    }
+
+                    // Retrieve last saved status from localStorage
+                    const lastSavedStatus = localStorage.getItem('lastStatus');
+                    if (lastSavedStatus) {
+                        statusSelect.value = lastSavedStatus;
+                        currentStatusDisplay.textContent = lastSavedStatus;
+                        updateStatus(lastSavedStatus); // Update DB with last saved status
+                    } else if (profile.status) {
+                        statusSelect.value = profile.status;
+                        currentStatusDisplay.textContent = profile.status;
+                    } else {
+                        updateStatus('Online');
+                    }
+                } else {
+                    currentDisplayName = savedDisplayName || 'Anonymous';
+                    currentUserIsAdmin = false;
+                    const defaultPfp = PREDEFINED_PFPS[0];
+                    const defaultStatus = localStorage.getItem('lastStatus') || 'Online'; // Use last saved status or default
+                    await usersRef.child(currentUserId).set({
+                        displayName: currentDisplayName,
+                        isAdmin: false,
+                        pfpUrl: defaultPfp,
+                        status: defaultStatus,
+                        lastActive: firebase.database.ServerValue.TIMESTAMP
+                    });
+                    await displayNamesLookupRef.child(currentDisplayName).set(currentUserId);
+                }
+                initializeChat();
+            } else {
+                showLoginModal();
+            }
+        });
+    };
+
+</script>
+
+</body>
+</html>
